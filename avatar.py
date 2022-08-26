@@ -68,12 +68,11 @@ def recursiveOverlap(actualSchedule, subjs):
                 actualSchedule = actualScheduleCopy.copy()
                 currentScore = score + newScore
                 actualSchedule = schedule
-        else:
-            score, schedule = recursiveOverlap(actualSchedule, subjs[1:])
-            if score > currentScore:
-                actualSchedule = actualScheduleCopy.copy()
-                currentScore = score
-                actualSchedule = schedule
+        score, schedule = recursiveOverlap(actualSchedule, subjs[1:])
+        if score > currentScore:
+            actualSchedule = actualScheduleCopy.copy()
+            currentScore = score
+            actualSchedule = schedule
     return currentScore, actualSchedule
 
 
@@ -122,28 +121,14 @@ def isIndependent(subjs):
                     
     return True, independent
 
-def isConvenient(s):
-    if len(s) >= 4:
-        return isIndependent(s)
-    return False, []
-
 if __name__ == '__main__':
-    s = sub_lists(list(subjects.keys()))
-    validWays = []
+    s = list(subjects.keys())
+    independent, schedule = isIndependent(s)
 
-    for x in s:
-        independent, schedule = isConvenient(x)
-        if independent:
-            validWays.append((x, schedule))
-
-    print("Valid ways to choose subjects: %i" % len(validWays))
-    
-    for c in validWays:
-        print('---------------')
-        score = 0
-        for h in c[1]:
-            subject, schedule = h
-            score += schedule[1]
-            print('Materia: %s, Horario: %s, Score: %s' % (subject, str(schedule[0]), schedule[1]))
-        print('TOTAL SCORE: %i' % score)
-        print('---------------')
+    print("============== BETTER WAY TO CHOOSE SUBJECTS ==============")
+    score = 0
+    for h in schedule:
+        subject, dayTime = h
+        score += dayTime[1]
+        print('Subject: %s, Schedule: %s, Score: %s' % (subject, str(dayTime[0]), dayTime[1]))
+    print('TOTAL SCORE: %i' % score)
